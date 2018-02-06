@@ -1,0 +1,156 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.lang.*;
+
+/**
+ *   Demonstration of a Java GUI interface
+ *   which operates as a simple calculator
+ *
+ *   This is about the 6th version I've written for different purposes
+ *
+ *   @author  Gary Allen
+ **/
+
+
+public class Calculator extends JFrame implements ActionListener {
+
+    // declare some components
+    JTextField xTF, yTF, zTF;
+    JButton addButton, subButton, multButton, divButton, powerButton;
+    JPanel panel1, panel2, panel3;
+
+    // the constructor method - this builds the visible GUI interface
+    Calculator () {
+        Container cp = getContentPane();
+        cp.setLayout(new BorderLayout (3,4));
+
+        addButton = new JButton("+");
+        subButton = new JButton("-");
+        multButton = new JButton("x");
+        divButton = new JButton("/");
+        powerButton = new JButton("^");
+
+        addButton.addActionListener(this);
+        subButton.addActionListener(this);
+        multButton.addActionListener(this);
+        divButton.addActionListener(this);
+        powerButton.addActionListener(this);
+
+        xTF = new JTextField("Input 1",12);
+        yTF = new JTextField("Input 2",12);
+        zTF = new JTextField("Result",14);
+
+        zTF.setEditable(false);
+
+        panel1 = new JPanel();
+        panel2 = new JPanel();
+        panel3 = new JPanel();
+
+        panel1.setLayout(new FlowLayout(FlowLayout.CENTER));
+        panel2.setLayout(new FlowLayout(FlowLayout.CENTER));
+        panel3.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+        panel1.add(xTF);
+        panel1.add(yTF);
+
+        panel2.add(addButton);
+        panel2.add(subButton);
+        panel2.add(multButton);
+        panel2.add(divButton);
+        panel2.add(powerButton);
+
+        panel3.add(zTF);
+
+        cp.add("North",panel1);
+        cp.add("South",panel2);
+        cp.add("Center",panel3);
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+    }
+
+    public void actionPerformed(ActionEvent event) {
+		/*
+		 *  'actionPerformed' is the method that will be called if (when) any of the
+		 *  four buttons are clicked by the user at run time
+		 */
+
+        double x,y,z;
+        String sx,sy;
+        String message;
+
+        // which button was pressed ?
+        Object source = event.getSource();
+
+        // extract strings from GUI text fields
+        sx = xTF.getText();
+        sy = yTF.getText();
+
+        // initialise some variables
+        z = 0;
+        message = "";
+
+        try {
+            // convert strings to numbers
+            x = Double.parseDouble(sx);
+            y = Double.parseDouble(sy);
+
+            // do the calculation
+            if ( source == addButton) {
+                z = x + y;
+            } else if ( source == subButton) {
+                z = x - y;
+            } else if ( source == multButton) {
+                z = x * y;
+            } else if ( source == divButton) {
+                if (y == 0)
+                    throw new DivideByZeroException();
+                z = x / y;
+            } else if ( source == powerButton) {
+                z = Math.pow(x,y);
+            }
+
+            // set the output
+            zTF.setText(String.valueOf(z));
+        }
+        catch (NumberFormatException e) {
+            message = "Both inputs must be numbers";
+        }
+        catch (DivideByZeroException e) {
+            message = "Can't divide by zero";
+        }
+        catch (Exception e) {
+            message = "other Error";
+        }
+        finally {
+
+            if (!message.equals("")) {
+                zTF.setText(message);
+
+            }
+        }
+    }
+
+
+    public static void main(String args[]) {
+        Calculator MyCalc = new Calculator();
+        MyCalc.setSize(300,200);
+        MyCalc.setTitle("A Simple Calculator");
+        MyCalc.setVisible(true);
+    }
+
+}
+
+
+
+class DivideByZeroException extends RuntimeException {
+
+    /**
+     *   This is an exception class used by the Calculator
+     *   to flag a "Divide by zero" error.
+     *   The class does not need any actual contents, it
+     *   just needs to exist.
+     */
+}
+
+
