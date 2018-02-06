@@ -1,0 +1,121 @@
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.*;
+
+/**
+ *
+ * @author Gary Allen
+ * @version 3
+ * With thanks to Ron and Anne
+ */
+
+public class SwExamp extends JFrame {
+
+    private String favouriteFruit = "";
+
+    private JMenuBar jmbTop;
+
+    private JMenu fileMenu;
+    private JMenu helpMenu;
+
+    private JMenuItem factoryPopUpMI;
+    private JMenuItem savePopUpMI;
+    private JMenuItem myDiagMI;
+    private JMenuItem exitMI;
+    private JMenuItem aboutMI;
+
+
+    /**
+     * SwExamp constructor method
+     **/
+    public SwExamp() {
+
+        // build GUI components
+        jmbTop = new JMenuBar ();
+
+        fileMenu = new JMenu("File");
+        helpMenu = new JMenu("Help");
+
+        factoryPopUpMI = new JMenuItem("Factory PopUp ...");
+        savePopUpMI = new JMenuItem("Save Results ...");
+        myDiagMI = new JMenuItem("Custom Dialog Box ...");
+        exitMI = new JMenuItem("Exit");
+        aboutMI = new JMenuItem("About ...");
+
+        fileMenu.add(factoryPopUpMI);
+        fileMenu.add(savePopUpMI);
+        fileMenu.add(myDiagMI);
+        fileMenu.add (new JSeparator());
+        fileMenu.add(exitMI);
+        helpMenu.add(aboutMI);
+
+        jmbTop.add(fileMenu);
+        jmbTop.add(helpMenu);
+        setJMenuBar (jmbTop);
+
+
+        //  add listeners for menu item actions
+        //  the listeners are anonymous objects
+        exitMI.addActionListener (new ActionListener () {
+            public void actionPerformed (ActionEvent evt) {
+                System.exit(0);
+            }
+        }     );
+
+        factoryPopUpMI.addActionListener (new ActionListener () {
+            public void actionPerformed (ActionEvent evt) {
+            favouriteFruit = JOptionPane.showInputDialog(SwExamp.this,
+                        "What is your favourite fruit?");
+            System.out.println(favouriteFruit);
+
+            }
+        }     );
+
+
+
+        savePopUpMI.addActionListener (new ActionListener () {
+            public void actionPerformed (ActionEvent evt) {
+                JOptionPane.showMessageDialog(SwExamp.this,
+                        "The files have been saved",
+                        "Save Results",
+                        JOptionPane.WARNING_MESSAGE,
+                        null);
+            }
+        }     );
+
+
+
+
+        myDiagMI.addActionListener (new ActionListener () {
+            public void actionPerformed (ActionEvent evt) {
+                SwDiaExamp dialog = new SwDiaExamp(SwExamp.this,false, favouriteFruit);
+                dialog.setVisible(true);
+            }
+        }     );
+
+        setTitle ("Swing Mini Example");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        setSize( 400, 200 );
+
+    }  // end constructor
+
+
+    /**
+     *   main method
+     */
+    public static void main (String args[]) {
+        SwExamp demo = new SwExamp();
+        demo.setVisible(true);
+    } // end main method
+
+    public String getFavouriteFruit() {
+        return favouriteFruit;
+    }
+
+    public void setFavouriteFruit(String favouriteFruit) {
+        this.favouriteFruit = favouriteFruit;
+    }
+} // end class SwExamp
+
